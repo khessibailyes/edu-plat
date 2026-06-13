@@ -1,0 +1,12 @@
+uploads/documents/*
+!uploads/documents/.gitkeep
+downloads/
+mobile_app/build/
+mobile_app/.dart_tool/
+mobile_app/.flutter-plugins
+mobile_app/.flutter-plugins-dependencies
+*.apk
+railway_setup.php
+reset_passwords.php
+.env
+.claude/

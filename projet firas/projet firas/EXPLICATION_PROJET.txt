@@ -1,0 +1,473 @@
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║           EXPLICATION COMPLÈTE DU PROJET : EduPlatform                     ║
+║           Plateforme Éducative & de Gestion – localhost:3000                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PARTIE 1 : C'EST QUOI CE PROJET EN LANGAGE SIMPLE ?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Imagine une école numérique sur ton ordinateur.
+  Ce projet est un SITE WEB qui tourne localement (sur ta machine),
+  accessible via le navigateur (comme Chrome ou Firefox) à l'adresse :
+  
+        http://localhost:3000
+
+  Ce site permet à trois types de personnes de se connecter et d'avoir
+  chacun un espace personnalisé :
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │  👤 ADMIN      → Le directeur. Il gère tout le monde.       │
+  │  👤 TEACHER    → L'enseignant. Il dépose des cours.         │
+  │  👤 STUDENT    → L'étudiant. Il suit les cours, pose des    │
+  │                  questions, reçoit des messages.            │
+  └─────────────────────────────────────────────────────────────┘
+
+  Le site ne nécessite pas d'internet. Il fonctionne comme une application
+  installée sur ton propre ordinateur.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PARTIE 2 : LES OUTILS UTILISÉS – EXPLIQUÉS SIMPLEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 1 : PHP                                                           │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    PHP est un langage de programmation. C'est lui qui fait le            │
+  │    "cerveau" du site. Il traite les données, vérifie les mots            │
+  │    de passe, enregistre les informations, etc.                           │
+  │                                                                          │
+  │  Analogie simple :                                                       │
+  │    PHP, c'est comme le cuisinier d'un restaurant. Il reçoit la           │
+  │    commande (ta demande), prépare le plat (traite les données)           │
+  │    et te l'apporte (affiche la page).                                    │
+  │                                                                          │
+  │  Dans ce projet :                                                        │
+  │    PHP gère la connexion, l'inscription, l'envoi de messages,            │
+  │    le téléchargement de fichiers, et l'affichage des tableaux            │
+  │    de bord.                                                              │
+  │                                                                          │
+  │  Version utilisée : PHP 8.x                                              │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 2 : MySQL (Base de Données)                                       │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    MySQL est un système de base de données. C'est là où toutes           │
+  │    les informations sont stockées de façon organisée.                    │
+  │                                                                          │
+  │  Analogie simple :                                                       │
+  │    MySQL, c'est comme un grand classeur avec des tiroirs.                │
+  │    Chaque tiroir (appelé "table") contient un type d'information.        │
+  │    Par exemple :                                                         │
+  │       - Tiroir 1 : tous les utilisateurs (nom, email, mot de passe)     │
+  │       - Tiroir 2 : tous les messages envoyés                            │
+  │       - Tiroir 3 : tous les documents déposés par les profs             │
+  │       - Tiroir 4 : tous les produits disponibles                        │
+  │                                                                          │
+  │  Dans ce projet, on a 4 tables principales :                             │
+  │                                                                          │
+  │  ● TABLE "users" (Les utilisateurs)                                      │
+  │      Stocke : ID, Nom complet, Email, Mot de passe (crypté),             │
+  │               Rôle (admin/teacher/student), Date de création             │
+  │                                                                          │
+  │  ● TABLE "messages" (Les messages)                                       │
+  │      Stocke : ID, Expéditeur, Destinataire, Contenu,                     │
+  │               Type (privé ou public), Date/heure                        │
+  │                                                                          │
+  │  ● TABLE "products" (Les produits)                                       │
+  │      Stocke : ID, Nom du produit, Prix, Quantité en stock               │
+  │                                                                          │
+  │  ● TABLE "documents" (Les fichiers)                                      │
+  │      Stocke : ID, ID du prof, Chemin du fichier,                         │
+  │               Description, Date d'upload                                │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 3 : PDO (Protection contre le piratage)                           │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    PDO est une façon sécurisée pour PHP de parler à MySQL.               │
+  │    Il protège le site contre une attaque appelée "injection SQL"         │
+  │    (une technique de pirates pour voler des données).                    │
+  │                                                                          │
+  │  Analogie simple :                                                       │
+  │    Imagine que quelqu'un essaie d'entrer dans ta maison en               │
+  │    se faisant passer pour un livreur. PDO, c'est le vigile               │
+  │    qui vérifie l'identité avant de laisser entrer quoi que ce soit.     │
+  │                                                                          │
+  │  Dans ce projet :                                                        │
+  │    Toutes les requêtes vers la base de données passent par PDO           │
+  │    avec des "requêtes préparées" – c'est la méthode la plus sûre.       │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 4 : HTML5 (La structure des pages)                                │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    HTML est le langage qui définit la structure d'une page web.          │
+  │    Il dit au navigateur : "ici il y a un titre", "ici un bouton",        │
+  │    "ici un tableau", etc.                                                │
+  │                                                                          │
+  │  Analogie simple :                                                       │
+  │    HTML c'est comme le plan d'architecture d'une maison.                 │
+  │    Il montre où sont les murs, les portes, les fenêtres –               │
+  │    mais pas encore la peinture ni la décoration.                         │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 5 : CSS3 (Le design et l'apparence)                               │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    CSS est le langage qui donne le style visuel au site :                │
+  │    les couleurs, les polices, les tailles, les animations, etc.          │
+  │                                                                          │
+  │  Analogie simple :                                                       │
+  │    Si HTML est le plan de la maison, CSS c'est le peintre,               │
+  │    le décorateur et le jardinier – il rend tout beau.                    │
+  │                                                                          │
+  │  Dans ce projet :                                                        │
+  │    Le fichier CSS crée une interface moderne avec :                      │
+  │       - Une barre latérale (sidebar) sombre et élégante                 │
+  │       - Des cartes avec ombres pour afficher les données                │
+  │       - Des couleurs différentes selon le rôle                          │
+  │       - Un design responsive (fonctionne aussi sur mobile)              │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 6 : JavaScript Vanilla (Actions dynamiques)                       │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    JavaScript est un langage qui s'exécute directement dans le           │
+  │    navigateur. Il permet de rendre la page interactive SANS              │
+  │    avoir à recharger la page.                                            │
+  │                                                                          │
+  │  "Vanilla" signifie qu'on utilise le JavaScript pur, sans               │
+  │  bibliothèques externes comme jQuery ou React.                           │
+  │                                                                          │
+  │  Dans ce projet :                                                        │
+  │    JavaScript gère :                                                     │
+  │       - Les onglets (tabs) qui s'affichent sans recharger la page       │
+  │       - Le glisser-déposer de fichiers (drag & drop)                   │
+  │       - Les messages de confirmation avant suppression                  │
+  │       - La disparition automatique des alertes après 4 secondes         │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 7 : Serveur PHP Intégré                                           │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    PHP possède un mini-serveur web intégré. Cela veut dire qu'on        │
+  │    n'a pas besoin d'installer Apache ou NGINX (des logiciels            │
+  │    serveur complexes).                                                   │
+  │                                                                          │
+  │  Comment on l'utilise ?                                                  │
+  │    On tape une simple commande dans le terminal :                        │
+  │                                                                          │
+  │        php -S localhost:3000 router.php                                  │
+  │                                                                          │
+  │    Cela démarre le site sur le port 3000 de ton ordinateur.             │
+  │                                                                          │
+  │  Analogie simple :                                                       │
+  │    C'est comme allumer une petite boutique temporaire chez toi.          │
+  │    Elle existe tant que tu ne fermes pas le terminal.                    │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 8 : phpMyAdmin                                                    │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    phpMyAdmin est une interface visuelle pour gérer MySQL.               │
+  │    Plutôt que de taper des commandes compliquées, tu cliques             │
+  │    sur des boutons pour voir et modifier tes données.                    │
+  │                                                                          │
+  │  Dans ce projet :                                                        │
+  │    On l'utilise pour importer le fichier "database.sql" qui crée        │
+  │    automatiquement toutes les tables et insère les données initiales.   │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 9 : BCrypt (Sécurité des mots de passe)                           │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    BCrypt est un algorithme de cryptage. Il transforme un mot            │
+  │    de passe lisible en une longue suite illisible de caractères.         │
+  │                                                                          │
+  │  Exemple :                                                               │
+  │    "admin1234"  →  "$2y$12$/vb02R0G2WD7H0z8tiIn6e..."                   │
+  │                                                                          │
+  │  Pourquoi c'est important ?                                              │
+  │    Si un pirate vole la base de données, il ne verra jamais les          │
+  │    vrais mots de passe – seulement des codes illisibles.                 │
+  │                                                                          │
+  │  Analogie simple :                                                       │
+  │    C'est comme mettre ton mot de passe dans un coffre-fort               │
+  │    impossible à casser. Même les développeurs du site ne peuvent        │
+  │    pas lire ton mot de passe.                                            │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  OUTIL 10 : Sessions PHP                                                 │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  C'est quoi ?                                                            │
+  │    Une session, c'est la mémoire temporaire du site pour chaque         │
+  │    visiteur connecté. Elle retient : qui tu es, quel est ton rôle,      │
+  │    etc., pendant toute ta visite.                                        │
+  │                                                                          │
+  │  Analogie simple :                                                       │
+  │    C'est comme le badge que tu reçois à l'entrée d'un bâtiment.         │
+  │    Tant que tu le portes, les portes s'ouvrent selon tes droits.        │
+  │    Quand tu pars (logout), le badge est détruit.                        │
+  │                                                                          │
+  │  Dans ce projet :                                                        │
+  │    La session stocke : l'ID utilisateur, le nom complet et le rôle.     │
+  │    Chaque page vérifie la session pour autoriser ou refuser l'accès.    │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PARTIE 3 : STRUCTURE DES FICHIERS DU PROJET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  projet firas/
+  │
+  ├── database.sql              → Script SQL : crée la base de données
+  │                               et insère les données initiales
+  │
+  ├── index.php                 → Page d'accueil : redirige vers la
+  │                               bonne page selon qui est connecté
+  │
+  ├── router.php                → Aide le serveur PHP à trouver les
+  │                               bons fichiers quand on navigue
+  │
+  ├── config/
+  │   └── db.php                → Connexion à MySQL (PDO).
+  │                               Contient l'identifiant et mot de passe
+  │                               de la base de données
+  │
+  ├── auth/
+  │   ├── login.php             → Page de connexion (formulaire email/mdp)
+  │   ├── register.php          → Page d'inscription (nouveau compte)
+  │   └── logout.php            → Déconnexion (détruit la session)
+  │
+  ├── dashboards/
+  │   ├── admin.php             → Tableau de bord Administrateur
+  │   ├── teacher.php           → Tableau de bord Enseignant
+  │   └── student.php           → Tableau de bord Étudiant
+  │
+  ├── actions/
+  │   ├── send_message.php      → Envoie un message (privé ou broadcast)
+  │   ├── upload_document.php   → Télécharge un fichier (prof uniquement)
+  │   ├── delete_document.php   → Supprime un fichier (prof uniquement)
+  │   ├── delete_user.php       → Supprime un utilisateur (admin seul)
+  │   ├── update_profile.php    → Modifie le profil (étudiant)
+  │   └── save_product.php      → Ajoute un produit (admin seul)
+  │
+  ├── assets/
+  │   ├── css/style.css         → Toute l'apparence visuelle du site
+  │   └── js/app.js             → Comportements interactifs (onglets, etc.)
+  │
+  └── uploads/
+      └── documents/            → Dossier où sont sauvegardés les fichiers
+                                  uploadés par les enseignants
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PARTIE 4 : FONCTIONNALITÉS DÉTAILLÉES PAR RÔLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  👤 ADMINISTRATEUR                                                       │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  ✅ Voir les statistiques globales (nb d'utilisateurs, docs, etc.)       │
+  │  ✅ Voir tous les utilisateurs triés par ordre alphabétique              │
+  │  ✅ Supprimer n'importe quel utilisateur (sauf lui-même)                 │
+  │  ✅ Envoyer un message broadcast à TOUS les utilisateurs                 │
+  │  ✅ Voir tous les messages du système                                    │
+  │  ✅ Voir les produits triés par prix croissant                           │
+  │  ✅ Voir les produits avec stock entre 10 et 30 unités                   │
+  │  ✅ Ajouter de nouveaux produits                                         │
+  │                                                                          │
+  │  Compte par défaut :                                                     │
+  │     Email    : admin@gmail.com                                           │
+  │     Mot de passe : admin1234                                             │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  👤 ENSEIGNANT (TEACHER)                                                 │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  ✅ Uploader des documents (PDF, Word, PowerPoint, ZIP, etc.)            │
+  │  ✅ Voir et gérer ses propres documents                                  │
+  │  ✅ Supprimer ses documents                                              │
+  │  ✅ Voir les questions reçues des étudiants (boîte de réception)         │
+  │  ✅ Envoyer des réponses privées aux étudiants                           │
+  │                                                                          │
+  │  Pour créer un compte enseignant :                                       │
+  │     → Aller sur la page d'inscription et choisir "Teacher"              │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  👤 ÉTUDIANT (STUDENT)                                                   │
+  │  ────────────────────────────────────────────────────────────────────   │
+  │  ✅ Modifier son profil (nom, email, mot de passe)                       │
+  │  ✅ Voir le fil public (annonces de l'admin, messages broadcast)         │
+  │  ✅ Voir sa boîte de réception (messages privés des profs)               │
+  │  ✅ Poser des questions privées aux enseignants                          │
+  │  ✅ Télécharger les documents déposés par les profs                      │
+  │                                                                          │
+  │  Pour créer un compte étudiant :                                         │
+  │     → Aller sur la page d'inscription et choisir "Student"              │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PARTIE 5 : LA SÉCURITÉ DU PROJET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Ce projet applique les meilleures pratiques de sécurité web :
+
+  🔒 1. MOTS DE PASSE CRYPTÉS
+       Les mots de passe ne sont JAMAIS stockés tels quels.
+       Ils sont transformés par BCrypt en code illisible.
+
+  🔒 2. PROTECTION CONTRE LES INJECTIONS SQL
+       Toutes les données envoyées par l'utilisateur passent par
+       des "requêtes préparées" PDO avant d'être utilisées.
+       Cela empêche les pirates de manipuler la base de données.
+
+  🔒 3. CONTRÔLE D'ACCÈS PAR RÔLE (RBAC)
+       Chaque page vérifie le rôle de l'utilisateur connecté.
+       Un étudiant ne peut JAMAIS accéder au tableau de bord admin,
+       même s'il tape l'URL directement.
+
+  🔒 4. NOMS DE FICHIERS ALÉATOIRES
+       Quand un prof uploade un fichier, le nom est remplacé par
+       un code aléatoire (ex: a3f9c2d1...). Cela empêche les
+       attaques par noms de fichiers malveillants.
+
+  🔒 5. VALIDATION DES FICHIERS UPLOADÉS
+       Seuls certains types de fichiers sont acceptés :
+       PDF, Word, PowerPoint, texte, ZIP.
+       Taille maximum : 10 MB.
+
+  🔒 6. SESSION SÉCURISÉE
+       Après connexion, l'ID de session est régénéré pour éviter
+       le "vol de session" (session hijacking).
+
+  🔒 7. AUCUNE DONNÉE SENSIBLE DANS LE NAVIGATEUR
+       Les erreurs de connexion à la base de données sont
+       enregistrées dans les logs serveur, jamais affichées.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PARTIE 6 : COMMENT LANCER LE PROJET (ÉTAPE PAR ÉTAPE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ÉTAPE 1 : Installer les prérequis
+  ─────────────────────────────────
+  Installer XAMPP (logiciel gratuit) qui installe automatiquement
+  PHP et MySQL sur ton ordinateur.
+  Téléchargement : https://www.apachefriends.org/
+
+  ÉTAPE 2 : Créer la base de données
+  ────────────────────────────────────
+  1. Ouvrir XAMPP → Démarrer MySQL
+  2. Aller sur : http://localhost/phpmyadmin
+  3. Cliquer sur "Importer"
+  4. Sélectionner le fichier : database.sql
+  5. Cliquer sur "Exécuter"
+  → La base de données "edu_platform" est créée automatiquement !
+
+  ÉTAPE 3 : Démarrer le serveur web
+  ──────────────────────────────────
+  1. Ouvrir VS Code
+  2. Ouvrir le terminal (Ctrl + `)
+  3. Aller dans le dossier du projet :
+         cd "C:\Users\DELL\Documents\projet firas"
+  4. Taper la commande :
+         php -S localhost:3000 router.php
+  5. Le terminal affiche :
+         "PHP Development Server started at http://localhost:3000"
+
+  ÉTAPE 4 : Utiliser le site
+  ──────────────────────────
+  1. Ouvrir Chrome ou Firefox
+  2. Aller à : http://localhost:3000/auth/login.php
+  3. Se connecter avec :
+         Email    : admin@edu.local
+         Mot de passe : admin1234
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PARTIE 7 : RÉSUMÉ DES TECHNOLOGIES (TABLEAU RÉCAPITULATIF)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────────────────┬──────────────────┬──────────────────────────────────┐
+  │  Technologie     │  Rôle            │  Analogie                        │
+  ├──────────────────┼──────────────────┼──────────────────────────────────┤
+  │  PHP 8           │  Logique métier  │  Le cuisinier du restaurant      │
+  │  MySQL           │  Stockage data   │  Le classeur avec tiroirs        │
+  │  PDO             │  Sécurité SQL    │  Le vigile à l'entrée            │
+  │  HTML5           │  Structure pages │  Le plan d'architecture          │
+  │  CSS3            │  Design visuel   │  Le décorateur d'intérieur       │
+  │  JavaScript      │  Interactivité   │  L'électricien (boutons, etc.)   │
+  │  BCrypt          │  Cryptage mdp    │  Le coffre-fort des mots de passe│
+  │  Sessions PHP    │  Authentification│  Le badge d'accès temporaire     │
+  │  Serveur PHP     │  Hébergement     │  La boutique temporaire chez soi │
+  │  phpMyAdmin      │  Gestion DB      │  L'interface visuelle de MySQL   │
+  └──────────────────┴──────────────────┴──────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PARTIE 8 : COMMENT LES PAGES COMMUNIQUENT ENTRE ELLES ?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Voici le parcours d'un utilisateur typique :
+
+  [Navigateur]
+      │
+      ▼
+  http://localhost:3000
+      │
+      ▼
+  index.php → "Est-ce que l'utilisateur est connecté ?"
+      │
+      ├── OUI → Redirige vers le bon tableau de bord selon le rôle
+      │
+      └── NON → Redirige vers auth/login.php
+                    │
+                    ▼
+               Formulaire de connexion
+                    │
+                    ▼ (vérifie email + mot de passe dans MySQL via PDO)
+                    │
+               ✅ OK → Crée une session → Redirige vers dashboard
+               ❌ ERREUR → Affiche "email ou mot de passe invalide"
+
+  Quand l'admin envoie un message broadcast :
+  ────────────────────────────────────────────
+  admin.php → [Formulaire] → POST vers actions/send_message.php
+                                  │
+                                  ▼
+                         Vérification : est-il admin ?
+                                  │
+                             ✅ Oui → INSERT dans la table messages
+                                  │
+                             Redirection → admin.php avec message "Envoyé !"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONCLUSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Ce projet est une application web complète qui simule un environnement
+  scolaire numérique. Il combine :
+
+  → Un BACKEND solide et sécurisé (PHP + MySQL + PDO)
+  → Un FRONTEND moderne et responsive (HTML + CSS + JavaScript)
+  → Un système de GESTION DES RÔLES (Admin / Teacher / Student)
+  → Une SÉCURITÉ renforcée (BCrypt, sessions, validation des entrées)
+
+  C'est un projet idéal pour apprendre les bases du développement web
+  full-stack, comprendre comment fonctionnent les sites que l'on utilise
+  au quotidien, et découvrir les bonnes pratiques professionnelles.
+
+══════════════════════════════════════════════════════════════════════════════
+  Projet : EduPlatform | Technologie : PHP 8 + MySQL | Date : Avril 2026
+══════════════════════════════════════════════════════════════════════════════

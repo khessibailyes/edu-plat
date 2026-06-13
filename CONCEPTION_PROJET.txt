@@ -1,0 +1,564 @@
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              CONCEPTION DU PROJET : EduPlatform                            ║
+║              Documents de Conception Technique & Fonctionnelle             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. DIAGRAMME DES CAS D'UTILISATION (USE CASE DIAGRAM)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                        ┌─────────────────────────────────────────────┐
+                        │             SYSTÈME EduPlatform             │
+                        │                                             │
+  ┌────────┐            │  ┌─────────────────────────────────────┐   │
+  │        │────────────┼─▶│  Se connecter (login)               │   │
+  │        │            │  └─────────────────────────────────────┘   │
+  │        │            │  ┌─────────────────────────────────────┐   │
+  │ TOUS   │────────────┼─▶│  S'inscrire (register)              │   │
+  │        │            │  └─────────────────────────────────────┘   │
+  │        │            │  ┌─────────────────────────────────────┐   │
+  │        │────────────┼─▶│  Se déconnecter (logout)            │   │
+  └────────┘            │  └─────────────────────────────────────┘   │
+                        │                                             │
+  ┌────────┐            │  ┌─────────────────────────────────────┐   │
+  │        │────────────┼─▶│  Voir statistiques globales         │   │
+  │        │            │  └─────────────────────────────────────┘   │
+  │        │            │  ┌─────────────────────────────────────┐   │
+  │ ADMIN  │────────────┼─▶│  Gérer les utilisateurs             │   │
+  │        │            │  │  (voir / supprimer)                 │   │
+  │        │            │  └─────────────────────────────────────┘   │
+  │        │            │  ┌─────────────────────────────────────┐   │
+  │        │────────────┼─▶│  Envoyer message broadcast          │   │
+  │        │            │  └─────────────────────────────────────┘   │
+  │        │            │  ┌─────────────────────────────────────┐   │
+  │        │────────────┼─▶│  Gérer les produits                 │   │
+  │        │            │  │  (ajouter / voir / filtrer)         │   │
+  └────────┘            │  └─────────────────────────────────────┘   │
+                        │                                             │
+  ┌─────────┐           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Uploader des documents             │   │
+  │         │           │  └─────────────────────────────────────┘   │
+  │TEACHER  │           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Supprimer ses documents            │   │
+  │         │           │  └─────────────────────────────────────┘   │
+  │         │           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Lire les questions des étudiants   │   │
+  │         │           │  └─────────────────────────────────────┘   │
+  │         │           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Répondre aux étudiants (privé)     │   │
+  └─────────┘           │  └─────────────────────────────────────┘   │
+                        │                                             │
+  ┌─────────┐           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Modifier son profil                │   │
+  │         │           │  └─────────────────────────────────────┘   │
+  │STUDENT  │           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Voir le fil public (feed)          │   │
+  │         │           │  └─────────────────────────────────────┘   │
+  │         │           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Consulter sa boîte de réception    │   │
+  │         │           │  └─────────────────────────────────────┘   │
+  │         │           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Poser une question à un prof       │   │
+  │         │           │  └─────────────────────────────────────┘   │
+  │         │           │  ┌─────────────────────────────────────┐   │
+  │         │───────────┼─▶│  Télécharger des documents          │   │
+  └─────────┘           │  └─────────────────────────────────────┘   │
+                        └─────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  2. DIAGRAMME ENTITÉ-RELATION (MCD – Modèle Conceptuel des Données)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────────────────────┐         ┌──────────────────────┐
+  │       USERS          │         │      DOCUMENTS       │
+  ├──────────────────────┤         ├──────────────────────┤
+  │ PK  id               │ 1     N │ PK  id               │
+  │     full_name        │─────────│ FK  teacher_id       │
+  │     email (UNIQUE)   │ "upload"│     file_path        │
+  │     password (hash)  │         │     description      │
+  │     role (enum)      │         │     upload_date      │
+  │     created_at       │         └──────────────────────┘
+  └──────────────────────┘
+           │ 1
+           │
+           │ "envoie"
+           │ N
+           ▼
+  ┌──────────────────────┐
+  │      MESSAGES        │
+  ├──────────────────────┤
+  │ PK  id               │
+  │ FK  sender_id        │
+  │     receiver_id      │ ← peut être un user ID ou 'all'
+  │     content          │
+  │     type (enum)      │ ← 'private' ou 'public'
+  │     timestamp        │
+  └──────────────────────┘
+
+  ┌──────────────────────┐
+  │      PRODUCTS        │  (table indépendante, gérée par l'admin)
+  ├──────────────────────┤
+  │ PK  id               │
+  │     product_name     │
+  │     price            │
+  │     stock_quantity   │
+  └──────────────────────┘
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │  VUES SQL (Views) créées automatiquement dans la base de données :       │
+  │                                                                          │
+  │  view_products_by_price     → produits triés par prix ASC               │
+  │  view_users_alphabetical    → utilisateurs triés par nom ASC             │
+  │  view_products_mid_stock    → produits avec stock ENTRE 10 ET 30        │
+  └──────────────────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  3. SCHÉMA DE LA BASE DE DONNÉES (MLD – Modèle Logique)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  users ( id, full_name, email, password, role, created_at )
+          ──                                                 
+  
+  messages ( id, sender_id, receiver_id, content, type, timestamp )
+                 ──────────
+                 FK → users.id
+
+  documents ( id, teacher_id, file_path, description, upload_date )
+                  ──────────
+                  FK → users.id
+
+  products ( id, product_name, price, stock_quantity )
+             ──
+
+  Légende :
+    PK = Clé Primaire (identifiant unique de chaque enregistrement)
+    FK = Clé Étrangère (lien vers une autre table)
+    ── = Clé Primaire soulignée
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  4. ARCHITECTURE TECHNIQUE (3 COUCHES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │                    NAVIGATEUR (CLIENT)                              │
+  │              Chrome / Firefox / Edge                                │
+  │                                                                     │
+  │   ┌──────────┐   ┌──────────┐   ┌──────────────────────────────┐  │
+  │   │  HTML5   │ + │   CSS3   │ + │      JavaScript Vanilla      │  │
+  │   │(structure)│   │ (style)  │   │  (interactivité, onglets)    │  │
+  │   └──────────┘   └──────────┘   └──────────────────────────────┘  │
+  └───────────────────────────┬─────────────────────────────────────────┘
+                              │  HTTP Request (GET / POST)
+                              ▼
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │                    SERVEUR PHP (BACKEND)                            │
+  │              php -S localhost:3000 router.php                       │
+  │                                                                     │
+  │   ┌─────────────────────────────────────────────────────────────┐  │
+  │   │  router.php → dispatche les requêtes vers le bon fichier    │  │
+  │   └──────────────────────────┬──────────────────────────────────┘  │
+  │                              │                                      │
+  │          ┌───────────────────┼──────────────────────┐              │
+  │          ▼                   ▼                       ▼              │
+  │   ┌────────────┐    ┌─────────────────┐    ┌──────────────────┐   │
+  │   │   auth/    │    │   dashboards/   │    │    actions/      │   │
+  │   │ login.php  │    │  admin.php      │    │ send_message.php │   │
+  │   │register.php│    │  teacher.php    │    │ upload_doc.php   │   │
+  │   │ logout.php │    │  student.php    │    │ delete_user.php  │   │
+  │   └────────────┘    └─────────────────┘    │ save_product.php │   │
+  │                                            └──────────────────┘   │
+  │                              │                                      │
+  │                              ▼                                      │
+  │   ┌─────────────────────────────────────────────────────────────┐  │
+  │   │  config/db.php → Connexion PDO sécurisée                    │  │
+  │   └─────────────────────────────────────────────────────────────┘  │
+  └───────────────────────────┬─────────────────────────────────────────┘
+                              │  PDO / SQL Queries
+                              ▼
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │                    BASE DE DONNÉES MySQL                            │
+  │                    (edu_platform)                                   │
+  │                                                                     │
+  │   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────────┐ │
+  │   │  users   │  │ messages │  │ products │  │   documents      │ │
+  │   └──────────┘  └──────────┘  └──────────┘  └──────────────────┘ │
+  └─────────────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  5. DIAGRAMME DE SÉQUENCE – CONNEXION UTILISATEUR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   Utilisateur       login.php          db.php            MySQL
+       │                  │                │                 │
+       │  Ouvre la page   │                │                 │
+       │─────────────────▶│                │                 │
+       │                  │                │                 │
+       │  Affiche form    │                │                 │
+       │◀─────────────────│                │                 │
+       │                  │                │                 │
+       │  Soumet email    │                │                 │
+       │  + mot de passe  │                │                 │
+       │─────────────────▶│                │                 │
+       │                  │  get_pdo()     │                 │
+       │                  │───────────────▶│                 │
+       │                  │                │  SELECT user    │
+       │                  │                │  WHERE email=?  │
+       │                  │                │────────────────▶│
+       │                  │                │                 │
+       │                  │                │◀ ── user row ───│
+       │                  │◀───────────────│                 │
+       │                  │                │                 │
+       │                  │ password_verify()                │
+       │                  │ (compare hash) │                 │
+       │                  │                │                 │
+       │         ┌─────── Si OK ──────────────────────────┐ │
+       │         │        │                │               │ │
+       │         │        │ session_start()│               │ │
+       │         │        │ $_SESSION =    │               │ │
+       │         │        │ [user_id, role]│               │ │
+       │         │        │                │               │ │
+       │ Redirigé vers dashboard           │               │ │
+       │◀────────┘        │                │               │ │
+       │                  │                │               │ │
+       │         ┌─────── Si ERREUR ──────────────────────┐ │
+       │◀────────┘ "Email ou mot de passe invalide"       │ │
+                                                           │ │
+                                                           └─┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  6. DIAGRAMME DE SÉQUENCE – UPLOAD D'UN DOCUMENT (TEACHER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   Teacher        teacher.php      upload_document.php      MySQL
+      │                │                    │                  │
+      │  Sélectionne   │                    │                  │
+      │  un fichier    │                    │                  │
+      │  + description │                    │                  │
+      │───────────────▶│                    │                  │
+      │                │  POST (multipart)  │                  │
+      │                │───────────────────▶│                  │
+      │                │                    │                  │
+      │                │              Vérifications :          │
+      │                │              ✔ Rôle = teacher?        │
+      │                │              ✔ Extension autorisée?   │
+      │                │              ✔ Taille ≤ 10MB?         │
+      │                │                    │                  │
+      │                │              Génère nom aléatoire     │
+      │                │              (bin2hex 16 bytes)       │
+      │                │                    │                  │
+      │                │              move_uploaded_file()     │
+      │                │              → uploads/documents/     │
+      │                │                    │                  │
+      │                │                    │  INSERT INTO     │
+      │                │                    │  documents(...)  │
+      │                │                    │─────────────────▶│
+      │                │                    │                  │
+      │                │                    │◀── OK ───────────│
+      │                │  Redirection +     │                  │
+      │                │  flash "succès"    │                  │
+      │◀───────────────│◀───────────────────│                  │
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  7. DIAGRAMME DE SÉQUENCE – BROADCAST ADMIN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+   Admin          admin.php       send_message.php       MySQL
+     │                │                   │                 │
+     │  Rédige        │                   │                 │
+     │  message       │                   │                 │
+     │  + Submit      │                   │                 │
+     │───────────────▶│                   │                 │
+     │                │  POST             │                 │
+     │                │  receiver_id="all"│                 │
+     │                │  type="public"    │                 │
+     │                │──────────────────▶│                 │
+     │                │                   │                 │
+     │                │             Vérifie rôle = admin    │
+     │                │             Vérifie content ≠ vide  │
+     │                │                   │                 │
+     │                │                   │  INSERT INTO    │
+     │                │                   │  messages(...)  │
+     │                │                   │────────────────▶│
+     │                │                   │                 │
+     │                │  Redirection      │◀── OK ──────────│
+     │◀───────────────│◀──────────────────│                 │
+     │  Flash "Message│                   │                 │
+     │   envoyé !"    │                   │                 │
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  8. DIAGRAMME DE FLUX DE NAVIGATION (Flowchart)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                         ┌─────────────────┐
+                         │   localhost:3000 │
+                         │   index.php      │
+                         └────────┬────────┘
+                                  │
+                     ┌────────────▼────────────┐
+                     │  Session active ?        │
+                     └────────────┬────────────┘
+                          │               │
+                         OUI             NON
+                          │               │
+                          │               ▼
+                          │    ┌─────────────────────┐
+                          │    │  auth/login.php      │
+                          │    │  (formulaire)        │
+                          │    └──────────┬──────────┘
+                          │               │
+                          │    ┌──────────▼──────────┐
+                          │    │  Identifiants OK ?   │
+                          │    └──────────┬──────────┘
+                          │         │           │
+                          │        OUI          NON
+                          │         │           │
+                          │         │           ▼
+                          │         │   Affiche erreur
+                          │         │   (retour login)
+                          │         │
+                          └────────▶│
+                                    │
+                       ┌────────────▼────────────┐
+                       │   Quel est le rôle ?     │
+                       └────────────┬────────────┘
+                      /             │              \
+                   admin         teacher         student
+                    /               │               \
+                   ▼                ▼                ▼
+          ┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+          │admin.php    │  │teacher.php  │  │student.php  │
+          ├─────────────┤  ├─────────────┤  ├─────────────┤
+          │- Stats      │  │- Upload doc │  │- Profil     │
+          │- Users      │  │- Mes docs   │  │- Feed       │
+          │- Broadcast  │  │- Q&A inbox  │  │- Inbox      │
+          │- Produits   │  │- Répondre   │  │- Poser Q    │
+          │- Messages   │  │             │  │- Docs       │
+          └─────────────┘  └─────────────┘  └─────────────┘
+                    \               │               /
+                     \              │              /
+                      ▼            ▼             ▼
+                         ┌─────────────────┐
+                         │  auth/logout.php │
+                         │  Détruit session │
+                         │  → login.php     │
+                         └─────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  9. MODÈLE DE CONTRÔLE D'ACCÈS (RBAC)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌──────────────────────────────┬─────────┬─────────┬─────────┐
+  │  Fonctionnalité              │  ADMIN  │ TEACHER │ STUDENT │
+  ├──────────────────────────────┼─────────┼─────────┼─────────┤
+  │  Voir dashboard admin        │   ✅    │   ❌    │   ❌    │
+  │  Supprimer un utilisateur    │   ✅    │   ❌    │   ❌    │
+  │  Envoyer broadcast           │   ✅    │   ❌    │   ❌    │
+  │  Gérer les produits          │   ✅    │   ❌    │   ❌    │
+  │  Voir tous les messages      │   ✅    │   ❌    │   ❌    │
+  ├──────────────────────────────┼─────────┼─────────┼─────────┤
+  │  Uploader des documents      │   ❌    │   ✅    │   ❌    │
+  │  Supprimer ses documents     │   ❌    │   ✅    │   ❌    │
+  │  Voir Q&A inbox              │   ❌    │   ✅    │   ❌    │
+  │  Répondre aux étudiants      │   ❌    │   ✅    │   ❌    │
+  ├──────────────────────────────┼─────────┼─────────┼─────────┤
+  │  Modifier son profil         │   ❌    │   ❌    │   ✅    │
+  │  Voir le fil public          │   ❌    │   ❌    │   ✅    │
+  │  Consulter son inbox         │   ❌    │   ❌    │   ✅    │
+  │  Poser une question          │   ❌    │   ❌    │   ✅    │
+  │  Télécharger des documents   │   ❌    │   ❌    │   ✅    │
+  ├──────────────────────────────┼─────────┼─────────┼─────────┤
+  │  Se connecter / déconnecter  │   ✅    │   ✅    │   ✅    │
+  │  S'inscrire                  │   ✅    │   ✅    │   ✅    │
+  └──────────────────────────────┴─────────┴─────────┴─────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  10. CONCEPTION DES INTERFACES (WIREFRAMES TEXTUELS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ── PAGE DE CONNEXION ────────────────────────────────────────────────────
+
+  ┌────────────────────────────────────────┐
+  │          🎓 EduPlatform                │
+  │                                        │
+  │         Welcome Back                   │
+  │         Sign in to your account        │
+  │                                        │
+  │   Email Address                        │
+  │   ┌──────────────────────────────┐     │
+  │   │  you@example.com             │     │
+  │   └──────────────────────────────┘     │
+  │                                        │
+  │   Password                             │
+  │   ┌──────────────────────────────┐     │
+  │   │  ••••••••                    │     │
+  │   └──────────────────────────────┘     │
+  │                                        │
+  │   ┌──────────────────────────────┐     │
+  │   │         Sign In              │     │
+  │   └──────────────────────────────┘     │
+  │                                        │
+  │   Don't have an account? Register      │
+  └────────────────────────────────────────┘
+
+  ── TABLEAU DE BORD (LAYOUT GÉNÉRAL) ─────────────────────────────────────
+
+  ┌──────────────┬─────────────────────────────────────────────────┐
+  │              │  TOPBAR : Titre du dashboard      [Badge rôle]  │
+  │   SIDEBAR    ├─────────────────────────────────────────────────┤
+  │  (sombre)    │                                                  │
+  │              │           CONTENU PRINCIPAL                     │
+  │  🎓 Logo     │                                                  │
+  │              │   ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐             │
+  │  • Nav 1     │   │stat1│ │stat2│ │stat3│ │stat4│             │
+  │  • Nav 2     │   └─────┘ └─────┘ └─────┘ └─────┘             │
+  │  • Nav 3     │                                                  │
+  │  • Nav 4     │   ┌───────────────────────────────────────────┐ │
+  │              │   │              CARTE / TABLEAU               │ │
+  │  ──────────  │   │                                           │ │
+  │  [Avatar]    │   │                                           │ │
+  │  Nom         │   └───────────────────────────────────────────┘ │
+  │  Rôle        │                                                  │
+  │  [Sign Out]  │                                                  │
+  └──────────────┴─────────────────────────────────────────────────┘
+
+  ── ONGLETS (TABS) ────────────────────────────────────────────────────────
+
+  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐
+  │  Onglet1 │ │  Onglet2 │ │  Onglet3 │ │  Onglet4 │
+  └──────────┘ └──────────┘ └──────────┘ └──────────┘
+  ┌─────────────────────────────────────────────────┐
+  │                                                  │
+  │      Contenu de l'onglet actif                  │
+  │                                                  │
+  └─────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  11. CONCEPTION DE LA SÉCURITÉ (SECURITY DESIGN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  MENACE              ATTAQUE POSSIBLE         CONTRE-MESURE
+  ─────────────────────────────────────────────────────────────────────────
+  Injection SQL       ' OR 1=1 --              PDO + Requêtes préparées
+  Vol de mots         Dump de la BDD           BCrypt cost=12
+  de passe
+  Accès non           URL directe vers         Vérification de session
+  autorisé            admin.php                + rôle sur chaque page
+  Upload malveillant  Fichier .php déguisé     Whitelist extensions,
+                      en PDF                   renommage aléatoire
+  Session hijacking   Vol du cookie            session_regenerate_id()
+                                               après connexion
+  XSS (injection      <script> dans un         htmlspecialchars() sur
+  JavaScript)         message                  toutes les sorties
+  Surcharge           Fichier de 1GB           Limite 10MB vérifiée
+  serveur             uploadé                  côté serveur
+  ─────────────────────────────────────────────────────────────────────────
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  12. DICTIONNAIRE DES DONNÉES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  TABLE : users
+  ┌─────────────┬──────────────┬──────────┬───────────────────────────────┐
+  │  Champ      │  Type        │  Taille  │  Description                  │
+  ├─────────────┼──────────────┼──────────┼───────────────────────────────┤
+  │  id         │  INT (PK)    │  Auto    │  Identifiant unique auto       │
+  │  full_name  │  VARCHAR     │  120     │  Prénom et nom complet         │
+  │  email      │  VARCHAR     │  180     │  Adresse email (unique)        │
+  │  password   │  VARCHAR     │  255     │  Hash BCrypt du mot de passe   │
+  │  role       │  ENUM        │  -       │  'admin','teacher','student'   │
+  │  created_at │  TIMESTAMP   │  -       │  Date/heure de création        │
+  └─────────────┴──────────────┴──────────┴───────────────────────────────┘
+
+  TABLE : messages
+  ┌─────────────┬──────────────┬──────────┬───────────────────────────────┐
+  │  Champ      │  Type        │  Taille  │  Description                  │
+  ├─────────────┼──────────────┼──────────┼───────────────────────────────┤
+  │  id         │  INT (PK)    │  Auto    │  Identifiant unique auto       │
+  │  sender_id  │  INT (FK)    │  -       │  ID de l'expéditeur (users.id) │
+  │  receiver_id│  VARCHAR     │  20      │  ID destinataire ou 'all'      │
+  │  content    │  TEXT        │  -       │  Corps du message              │
+  │  type       │  ENUM        │  -       │  'private' ou 'public'         │
+  │  timestamp  │  TIMESTAMP   │  -       │  Date/heure d'envoi            │
+  └─────────────┴──────────────┴──────────┴───────────────────────────────┘
+
+  TABLE : products
+  ┌────────────────┬────────────┬──────────┬──────────────────────────────┐
+  │  Champ         │  Type      │  Taille  │  Description                 │
+  ├────────────────┼────────────┼──────────┼──────────────────────────────┤
+  │  id            │  INT (PK)  │  Auto    │  Identifiant unique auto      │
+  │  product_name  │  VARCHAR   │  200     │  Nom du produit               │
+  │  price         │  DECIMAL   │  10,2    │  Prix en dollars              │
+  │  stock_quantity│  INT       │  -       │  Quantité en stock            │
+  └────────────────┴────────────┴──────────┴──────────────────────────────┘
+
+  TABLE : documents
+  ┌─────────────┬──────────────┬──────────┬───────────────────────────────┐
+  │  Champ      │  Type        │  Taille  │  Description                  │
+  ├─────────────┼──────────────┼──────────┼───────────────────────────────┤
+  │  id         │  INT (PK)    │  Auto    │  Identifiant unique auto       │
+  │  teacher_id │  INT (FK)    │  -       │  ID du prof (users.id)         │
+  │  file_path  │  VARCHAR     │  500     │  Chemin relatif du fichier     │
+  │  description│  TEXT        │  -       │  Description du document       │
+  │  upload_date│  TIMESTAMP   │  -       │  Date/heure d'upload           │
+  └─────────────┴──────────────┴──────────┴───────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  13. ARBRE DES PAGES (SITEMAP)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  localhost:3000/
+  │
+  ├── index.php                   (redirection auto)
+  │
+  ├── auth/
+  │   ├── login.php               (connexion)
+  │   ├── register.php            (inscription)
+  │   └── logout.php              (déconnexion)
+  │
+  ├── dashboards/
+  │   ├── admin.php               (tableau admin)
+  │   │   ├── [Onglet] Overview
+  │   │   ├── [Onglet] Users
+  │   │   ├── [Onglet] Broadcast
+  │   │   ├── [Onglet] Products
+  │   │   └── [Onglet] Messages
+  │   │
+  │   ├── teacher.php             (tableau enseignant)
+  │   │   ├── [Onglet] Upload Documents
+  │   │   ├── [Onglet] Mes Documents
+  │   │   ├── [Onglet] Q&A Inbox
+  │   │   └── [Onglet] Reply to Student
+  │   │
+  │   └── student.php             (tableau étudiant)
+  │       ├── [Onglet] My Profile
+  │       ├── [Onglet] Public Feed
+  │       ├── [Onglet] Inbox
+  │       ├── [Onglet] Ask a Teacher
+  │       └── [Onglet] Documents
+  │
+  └── actions/                    (traitements, pas de vue)
+      ├── send_message.php
+      ├── upload_document.php
+      ├── delete_document.php
+      ├── delete_user.php
+      ├── update_profile.php
+      └── save_product.php
+
+
+══════════════════════════════════════════════════════════════════════════════
+  Projet : EduPlatform | Conception : Avril 2026 | Stack : PHP 8 + MySQL
+══════════════════════════════════════════════════════════════════════════════
