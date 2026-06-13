@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <line x1="12" y1="8" x2="12" y2="16"/>
             <polyline points="8 12 12 16 16 12"/>
         </svg>
-        <a href="/downloads/" class="btn-download" download>
+        <a href="https://github.com/khessibailyes/edu-plat/releases/download/v1.0/edu-plat.apk" class="btn-download">
             Télécharger l'application Android
         </a>
     </div>
