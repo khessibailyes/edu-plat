@@ -20,13 +20,13 @@ $total_students = $pdo->query("SELECT COUNT(*) FROM users WHERE role='student'")
 $total_docs     = $pdo->query('SELECT COUNT(*) FROM documents')->fetchColumn();
 
 // ── Users list ────────────────────────────────────────────
-$users = $pdo->query('SELECT * FROM view_users_alphabetical')->fetchAll();
+$users = $pdo->query('SELECT * FROM users ORDER BY full_name ASC')->fetchAll();
 
 // ── Products by price ─────────────────────────────────────
-$products_sorted = $pdo->query('SELECT * FROM view_products_by_price')->fetchAll();
+$products_sorted = $pdo->query('SELECT * FROM products ORDER BY price ASC')->fetchAll();
 
 // ── Products mid-stock ────────────────────────────────────
-$products_mid = $pdo->query('SELECT * FROM view_products_mid_stock')->fetchAll();
+$products_mid = $pdo->query('SELECT * FROM products WHERE stock_quantity BETWEEN 10 AND 30')->fetchAll();
 
 // ── Recent messages ───────────────────────────────────────
 $messages = $pdo->query(
